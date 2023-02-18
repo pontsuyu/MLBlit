@@ -1,29 +1,49 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
+import pandas as pd
+import polars as pl
+import altair as alt
 
-st.title("MLB Player Data")
+st.title("OHTANI-SAN 2021")
 
 #### read data
-#ydat = pd.read_csv("data/")
+base = pd.read_csv("data/Ohtani2021.csv")
+base["pfx_x"] = base["pfx_x"]*30.48
+base["pfx_z"] = base["pfx_z"]*30.48
+base = pl.from_pandas(base)
 
 #### sidebar part
 ss = st.sidebar
-ss.write("test")
-ss.selectbox("Select Pitcher:", ["Shohei Ohtani","Yu Darvish"])
+ss.header("Setting")
+pitch_type = ss.selectbox("Pitch Type", ["4-Seam Fastball","Cutter","Slider",
+                    "Curveball","Split-Finger"])
 
 
 #### sidebar part
+dat = base.filter(pl.col("pitch_name")==pitch_type)
 
-st.selectbox("球種", ["Four-Seam","slider"])
+col1, col2, col3, col4 = st.columns(4)
+col1.header("球速")
+release_speed = np.nanmean(dat["release_speed"]*1.609).round(1)
+col1.write(f"{release_speed} km/h")
 
-st.write("球速")
+col2.header("回転数")
+release_spin_rate = np.nanmean(dat["release_spin_rate"]).round(1)
+col2.write(f"{release_spin_rate} rpm")
 
-st.write("回転数")
+col3.header("横変化量")
+pfx_x = np.nanmean(dat["pfx_x"]).round(1)
+col3.write(f"{pfx_x} cm")
 
-st.write("回転軸")
+col4.header("縦変化量")
+pfx_z = np.nanmean(dat["pfx_z"]).round(1)
+col4.write(f"{pfx_z} cm")
 
-st.write("変化量")
+st.write("\n\n")
 
-st.write("変化量プロット")
+st.header("変化量プロット")
+scatter = alt.Chart(base.to_pandas()).mark_circle().encode(
+    x='pfx_x', y='pfx_z', color="pitch_name"
+  ).interactive()
+st.altair_chart(scatter, use_container_width=True)
 
