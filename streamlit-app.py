@@ -23,25 +23,25 @@ pitch_type = ss.selectbox("Pitch Type", ["4-Seam Fastball","Cutter","Slider",
 dat = base.filter(pl.col("pitch_name")==pitch_type)
 
 col1, col2, col3, col4 = st.columns(4)
-col1.header("release_speed")
+col1.header("Pitch  Speed")
 release_speed = np.nanmean(dat["release_speed"]*1.609).round(1)
-col1.write(f"{release_speed} km/h")
+col1.subheader(f"`{release_speed} km/h`")
 
-col2.header("release_spin_rate")
-release_spin_rate = np.nanmean(dat["release_spin_rate"]).round(1)
-col2.write(f"{release_spin_rate} rpm")
+col2.header("Spin  Rate")
+release_spin_rate = int(np.nanmean(dat["release_spin_rate"]))
+col2.subheader(f"`{release_spin_rate} rpm`")
 
-col3.header("pfx_x")
+col3.header("Horizontal  Break")
 pfx_x = np.nanmean(dat["pfx_x"]).round(1)
-col3.write(f"{pfx_x} cm")
+col3.subheader(f"`{pfx_x} cm`")
 
-col4.header("pfx_z")
+col4.header("Vertical  Break")
 pfx_z = np.nanmean(dat["pfx_z"]).round(1)
-col4.write(f"{pfx_z} cm")
+col4.subheader(f"`{pfx_z} cm`")
 
-st.write("\n\n\n")
+st.write("\n\n")
 
-st.header("plot")
+st.header("Plot")
 scatter = alt.Chart(base.to_pandas()).mark_circle().encode(
     x='pfx_x', y='pfx_z', color="pitch_name"
   ).interactive()
