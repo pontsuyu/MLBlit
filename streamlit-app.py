@@ -23,25 +23,25 @@ pitch_type = ss.selectbox("Pitch Type", ["4-Seam Fastball","Cutter","Slider",
 dat = base.filter(pl.col("pitch_name")==pitch_type)
 
 col1, col2, col3, col4 = st.columns(4)
-col1.header("球速")
+col1.header("release_speed")
 release_speed = np.nanmean(dat["release_speed"]*1.609).round(1)
 col1.write(f"{release_speed} km/h")
 
-col2.header("回転数")
+col2.header("release_spin_rate")
 release_spin_rate = np.nanmean(dat["release_spin_rate"]).round(1)
 col2.write(f"{release_spin_rate} rpm")
 
-col3.header("横変化量")
+col3.header("pfx_x")
 pfx_x = np.nanmean(dat["pfx_x"]).round(1)
 col3.write(f"{pfx_x} cm")
 
-col4.header("縦変化量")
+col4.header("pfx_z")
 pfx_z = np.nanmean(dat["pfx_z"]).round(1)
 col4.write(f"{pfx_z} cm")
 
 st.write("\n\n\n")
 
-st.header("変化量プロット")
+st.header("plot")
 scatter = alt.Chart(base.to_pandas()).mark_circle().encode(
     x='pfx_x', y='pfx_z', color="pitch_name"
   ).interactive()
