@@ -39,7 +39,7 @@ col4.header("縦変化量")
 pfx_z = np.nanmean(dat["pfx_z"]).round(1)
 col4.write(f"{pfx_z} cm")
 
-st.write("\n\n")
+st.write("\n\n\n")
 
 st.header("変化量プロット")
 scatter = alt.Chart(base.to_pandas()).mark_circle().encode(
