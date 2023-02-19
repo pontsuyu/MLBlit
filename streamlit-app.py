@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 import polars as pl
 import altair as alt
