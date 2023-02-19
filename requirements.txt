@@ -3,3 +3,4 @@ numpy
 pandas
 polars
 altair
+streamlit-pandas-profiling
